@@ -26,7 +26,7 @@ int newton(int ordemAtual,int qntPontos,float** vetorOrdem,float** vetorPontos){
 }
 
 int main(){//Utilizar a main para criar 
-
+    system("cls");
     int qntPontos(0),grau(0);
     float **pontos = nullptr;
     float **ordem = nullptr;//Ponteiro onde as ordens serão guardada
@@ -78,7 +78,7 @@ int main(){//Utilizar a main para criar
             somatorioX *= (x-pontos[j][0]);
         }
         //preRes guarda o somatório disso tudo
-        preRes = fxGrau * somatorioX;
+        preRes += fxGrau * somatorioX;
         fxGrau = 0;
         somatorioX = 1;
     }
@@ -87,6 +87,6 @@ int main(){//Utilizar a main para criar
     
     cout << "Resultado: " << res <<endl;
     //Corrigir resultado: Deu uma unidade acima do esperado
-    //Res = 2.25 ao inves de 1.25
+    //Res = 2 ao inves de 1.25
     return 0;
 }
