@@ -2,28 +2,34 @@
 #include <math.h>
 using namespace std;
 
-int newton(int ordemAtual,int qntPontos,float** vetorOrdem,float** vetorPontos){//Função recursiva 
-    //Verificar se o vetor inserido está completamente zerado, se estiver, retorna;
-    if(qntPontos>1){
-        int qntZeros(0);
-        vetorOrdem[ordemAtual] = (float*)malloc((qntPontos-1)*sizeof(float));//Vai criando até chegar em um vetor com uma posição
+int newton(int ordemAtual, int qntPontos, float** vetorOrdem, float** vetorPontos) {
+    if (qntPontos > 1) {
+        int qntZeros = 0;
+        vetorOrdem[ordemAtual] = (float*)malloc((qntPontos - 1) * sizeof(float));
         cout << "\nOrdem: " << ordemAtual << endl;
-        for(int i = 0;i<qntPontos-1;i++){
-            vetorOrdem[ordemAtual][i] = (vetorOrdem[ordemAtual-1][i+1]-vetorOrdem[ordemAtual-1][i])/(vetorPontos[i+1][0]-vetorPontos[i][0]);//Calculo OK
-            cout << "F(X"<< i <<"): " << vetorOrdem[ordemAtual][i] << endl;
-            if(vetorOrdem[ordemAtual][i] == 0){
+
+        for (int i = 0; i < qntPontos - 1; i++) {
+            vetorOrdem[ordemAtual][i] = 
+                (vetorOrdem[ordemAtual - 1][i + 1] - vetorOrdem[ordemAtual - 1][i]) /
+                (vetorPontos[i + ordemAtual][0] - vetorPontos[i][0]);
+
+            cout << "F(X" << i << "): " << vetorOrdem[ordemAtual][i] << endl;
+
+            if (vetorOrdem[ordemAtual][i] == 0) {
                 qntZeros++;
             }
         }
-        //Verificar se o vetor de resposta atual esta vazio ou não para parar com a recursividade
-        if(qntZeros == qntPontos-1){
+
+        // Verifica se todos os valores da ordem atual são zero, caso positivo, para a recursividade
+        if (qntZeros == qntPontos - 1) {
             return 0;
-        }else{
-            newton(ordemAtual+1,qntPontos-1,vetorOrdem,vetorPontos);
+        } else {
+            newton(ordemAtual + 1, qntPontos - 1, vetorOrdem, vetorPontos);
         }
     }
     return 0;
 }
+
 
 int main(){//Utilizar a main para criar 
     system("cls");
@@ -34,10 +40,7 @@ int main(){//Utilizar a main para criar
 
     cout << "Quantidade de pontos a ser inserida: ";
     cin >> qntPontos;
-    cout << "Insira o valor do X: ";
-    cin >> x;
-    cout << "Digite grau solicitado: ";
-    cin >> grau;
+
 
     pontos = new float*[qntPontos];//O * de ponteiro tem que ser depois do tipo por algum motivo
     ordem = (float**)malloc(qntPontos * sizeof(float*));
@@ -66,14 +69,17 @@ int main(){//Utilizar a main para criar
     
     //Abrir função recursiva
     newton(1,qntPontos,ordem,pontos);
-
+    cout << "Insira o valor do X: ";
+    cin >> x;
+    cout << "Digite grau solicitado: ";
+    cin >> grau;
     //Calculo do polinomio
     //O tamanho do calculo vai depender do grau solicitado
 
     /*Pn(X) = f(X0) + [Primeira ordem]F(X0)/h * (X-X0) + ...*/
     //Somar f(X0) no final de tudo
     for(int i = 0;i<grau;i++){
-        fxGrau = ordem[i+1][0]/(i+1*pow(base,i+1));
+        fxGrau = ordem[i+1][0];
         for(int j = 0;j<=i;j++){
             somatorioX *= (x-pontos[j][0]);
         }
